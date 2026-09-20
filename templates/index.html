@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mi Tiendita Tech Argo - De Regreso</title>
+<style>
+body { font-family: Arial; background: #f5f5f5; text-align: center; }
+.producto {background: white; width: 250px; display: inline-block; 
+margin: 15px; padding: 15px; border-radius: 10px; }
+.producto img { width: 200px; height: 200px; object-fit: contain; }
+button { background: #3483fa; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
+button:hover { background: #2968c8; }
+</style>
+</head>
+<body>
+
+<div id="carrito">🛒 Carrito: 0 Productos - Total: $0</div>
+<button onclick="comprar()" style="background:green; color:white; padding:10px; margin-top:10px; width:100%; border:none; border-radius:5px; cursor:pointer; font-size:16px;">🛒 Finalizar Compra</button>
+
+<h1>📱 Mi Tiendita Tech Argo</h1>
+<p>Proyecto Original de Técnico - Versión 2026</p>
+
+<div class="producto">
+<img src="/static/pocof3.png" alt="Poco F3">
+<h3>Poco F3</h3>
+<p>El bestia calidad-precio</p>
+<h2>$5,499</h2>
+<button onclick="agregar(5499, 'Poco F3')">Agregar al carrito</button>
+</div>
+
+<div class="producto">
+<img src="/static/iphone6s.png" alt="iPhone 6s">
+<h3>iPhone 6s</h3>
+<p>El clásico que nunca muere</p>
+<h2>$2,999</h2>
+<button onclick="agregar(2999, 'iPhone 6s')">Agregar al carrito</button>
+</div>
+
+<div class="producto">
+<img src="/static/miband5.jpg" alt="Mi Band 5">
+<h3>Mi Band 5</h3>
+<p>Tu vida fitness en la muñeca</p>
+<h2>$699</h2>
+<button onclick="agregar(699, 'Mi Band 5')">Agregar al carrito</button>
+</div>
+
+<script>
+  let total = 0;
+  let cantidad = 0;
+  let ultimo = "";
+
+  function agregar(precio, nombre){
+    total = total + precio;
+    cantidad = cantidad + 1;
+    ultimo = nombre;
+    document.getElementById('carrito').innerText = "🛒 Carrito: " + cantidad + " productos - Total: $" + total + " | Ultimo: " + nombre;
+  }
+
+  function comprar(){
+    if(total==0){ alert("Carrito vacío bro"); return; }
+    fetch('/pedido', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'producto=' + encodeURIComponent('Carrito Total $' + total + ' - ' + ultimo)
+    })
+    .then(res => {
+      if(res.redirected){ window.location = res.url; }
+      else { return res.text(); }
+    })
+    .then(msg => { if(msg) alert(msg); })
+  }
+</script>
+
+</body>
+</html>
