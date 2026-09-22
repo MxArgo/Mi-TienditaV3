@@ -57,5 +57,4 @@ def admin():
         html += "<p>No hay pedidos aún</p>"
     return html
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app.run(debug=True)
